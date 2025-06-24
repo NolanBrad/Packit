@@ -2,7 +2,7 @@ load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
 load("@rules_cc//cc:cc_library.bzl", "cc_library")
 
 cc_library(
-    name = "packet_lib",
+    name = "pakit_lib",
     srcs = ["src/pakit.c"],
     hdrs = ["include/pakit.h"],
     includes = ["include"],
@@ -10,7 +10,13 @@ cc_library(
 )
 
 cc_binary(
-    name = "packit_sample",
+    name = "pakit_sample",
     srcs = ["sample/packit_sample.c"],
     deps = [":packet_lib"],
+)
+
+cc_binary(
+    name = "pakit_test",
+    srcs = ["test/pakit_test.c"],
+    deps = [":pakit_lib"],
 )

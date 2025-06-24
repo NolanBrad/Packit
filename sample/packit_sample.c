@@ -76,7 +76,7 @@ void process_byte_stream() {
                 printf("IN_PROGRESS (Waiting for more bytes)\n");
                 break;
 
-            case PAKIT_STATUS_ERROR_INVALID_ID:
+            case PAKIT_STATUS_ERROR_INVALID_SOP:
                 printf("ERROR: Invalid packet ID\n");
                 break;
 
@@ -272,7 +272,7 @@ void process_invalid_data() {
                                            NULL);
 
     printf("Result: ");
-    if (status == PAKIT_STATUS_ERROR_INVALID_ID) {
+    if (status == PAKIT_STATUS_ERROR_INVALID_SOP) {
         printf("Properly detected invalid packet ID\n");
     } else {
         printf("Unexpected status: %d\n", status);

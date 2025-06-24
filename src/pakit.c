@@ -8,7 +8,6 @@ void pakit_create(PakitReceiver* receiver) {
     if (receiver != NULL) {
         pakit_init(receiver);
     }
-    return receiver;
 }
 
 void pakit_destroy(PakitReceiver* receiver) {
@@ -46,7 +45,7 @@ PakitStatus pakit_receive_byte(PakitReceiver* receiver, uint8_t byte) {
                 if (receiver->packet.fields.header.sop[0] != EXPECTED_SOP_0 ||
                     receiver->packet.fields.header.sop[1] != EXPECTED_SOP_1) {
                     pakit_init(receiver);
-                    return PAKIT_STATUS_ERROR_INVALID_ID;
+                    return PAKIT_STATUS_ERROR_INVALID_SOP;
                 }
                 // Transition to next state
                 receiver->state = STATE_PACKET_TYPE;

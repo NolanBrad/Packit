@@ -12,7 +12,7 @@
 typedef enum {
     PAKIT_STATUS_SUCCESS,          // Packet successfully completed
     PAKIT_STATUS_IN_PROGRESS,      // Packet reception in progress, more data needed
-    PAKIT_STATUS_ERROR_INVALID_ID, // Error: Invalid unique identifier
+    PAKIT_STATUS_ERROR_INVALID_SOP, // Error: Invalid unique identifier
     PAKIT_STATUS_ERROR_SIZE_LARGE, // Error: Payload size too large
     PAKIT_STATUS_ERROR_OVERFLOW,   // Error: Buffer overflow
     PAKIT_STATUS_ERROR_NULL_PARAM  // Error: NULL parameter provided
