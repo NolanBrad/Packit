@@ -1,13 +1,16 @@
+load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
+
 cc_library(
-    name = "packet_receiver",
-    srcs = ["src/packet_receiver.c"],
-    hdrs = ["include/packet_receiver.h"],
+    name = "packet_lib",
+    srcs = ["src/pakit.c"],
+    hdrs = ["include/pakit.h"],
     includes = ["include"],
     visibility = ["//visibility:public"],
 )
 
 cc_binary(
-    name = "simple_receiver",
-    srcs = ["examples/simple_receiver.c"],
-    deps = [":packet_receiver"],
+    name = "packit_sample",
+    srcs = ["sample/packit_sample.c"],
+    deps = [":packet_lib"],
 )

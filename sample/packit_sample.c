@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
-#include "packet_receiver.h"
+#include "pakit.h"
 
 
 // Helper function to print a packet's contents
@@ -42,6 +42,7 @@ void process_byte_stream() {
 
     // Create and initialize the packet receiver
     PakitReceiver receiver;
+
     pakit_create(&receiver);
 
     // Example packet: 0xB0B2 + type 0x0103 + count 0x0001 + size 0x0005 + payload "Hello"
@@ -116,11 +117,10 @@ void process_buffer() {
     printf("--------------------------------------\n");
 
     // Create the packet receiver
-    PakitReceiver* receiver = pakit_create();
-    if (!receiver) {
-        printf("Failed to create packet receiver\n");
-        return;
-    }
+    PakitReceiver receiver_inst;
+    PakitReceiver *receiver = &receiver_inst;
+
+    pakit_create(receiver);
 
     // Example packet with binary payload and count field
     uint8_t binary_packet[] = {
@@ -168,8 +168,10 @@ void process_multiple_packets_in_buffer() {
     printf("--------------------------------------------------------\n");
 
     // Create the packet receiver
-    PakitReceiver receiver;
-    pakit_create(&receiver);
+    PakitReceiver receiver_inst;
+    PakitReceiver *receiver = &receiver_inst;
+
+    pakit_create(receiver);
 
     // Create packets using pakit_packet_create
     Packet packet1, packet2, packet3;
@@ -200,7 +202,7 @@ void process_multiple_packets_in_buffer() {
 
     // Process until we reach the end of the buffer
     while (position < sizeof(multi_packet)) {
-        PakitStatus status = pakit_receive_buffer(&receiver,
+        PakitStatus status = pakit_receive_buffer(receiver,
                                                multi_packet,
                                                sizeof(multi_packet),
                                                &position);
@@ -209,7 +211,7 @@ void process_multiple_packets_in_buffer() {
             // Got a complete packet
             packet_count++;
             Packet packet;
-            if (pakit_is_packet_complete(&receiver, &packet)) {
+            if (pakit_is_packet_complete(receiver, &packet)) {
                 printf("\nPacket #%d at position %zu:\n", packet_count, position);
                 print_packet(&packet);
 
@@ -224,7 +226,7 @@ void process_multiple_packets_in_buffer() {
             }
 
             // Reset for next packet
-            pakit_init(&receiver);
+            pakit_init(receiver);
         }
         else if (status != PAKIT_STATUS_IN_PROGRESS) {
             // Error occurred
@@ -241,7 +243,7 @@ void process_multiple_packets_in_buffer() {
     printf("\nFound %d packets in the buffer\n", packet_count);
 
     // Cleanup
-    pakit_destroy(&receiver);
+    pakit_destroy(receiver);
 }
 
 void process_invalid_data() {
@@ -249,11 +251,10 @@ void process_invalid_data() {
     printf("--------------------------------\n");
 
     // Create the packet receiver
-    PakitReceiver* receiver = pakit_create();
-    if (!receiver) {
-        printf("Failed to create packet receiver\n");
-        return;
-    }
+    PakitReceiver receiver_inst;
+    PakitReceiver *receiver = &receiver_inst;
+
+    pakit_create(receiver);
 
     // Invalid packet (wrong SOP)
     uint8_t invalid_packet[] = {
