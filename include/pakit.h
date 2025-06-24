@@ -26,8 +26,45 @@ typedef struct {
     uint8_t *payload;
 } Packet;
 
-// Opaque struct for the packet receiver
-typedef struct PakitReceiver PakitReceiver;
+// Define states for the packet receiver state machine
+typedef enum {
+    STATE_UNIQUE_ID,
+    STATE_PACKET_TYPE,
+    STATE_COUNT,
+    STATE_SIZE,
+    STATE_PAYLOAD,
+    STATE_COMPLETE
+} ReceiverState;
+
+#define HEADER_SIZE (PACKET_SOP_SIZE + PACKET_TYPE_SIZE + PACKET_COUNT_SIZE + PACKET_SIZE_SIZE)
+#define MAX_PACKET_SIZE (255 + HEADER_SIZE)
+#define EXPECTED_SOP_0 0xB0
+#define EXPECTED_SOP_1 0xB2
+
+// Header structure that overlays the beginning of the packet buffer
+typedef struct {
+    uint8_t sop[PACKET_SOP_SIZE];
+    uint8_t type[PACKET_TYPE_SIZE];
+    uint8_t count_bytes[PACKET_COUNT_SIZE];
+    uint8_t size_bytes[PACKET_SIZE_SIZE];  // Raw size bytes to handle endianness
+} PacketHeader;
+
+// Union to access packet data either as a byte buffer or structured fields
+typedef union {
+    struct {
+        PacketHeader header;
+        uint8_t payload[MAX_PACKET_SIZE];
+    } fields;
+    uint8_t buffer[HEADER_SIZE + MAX_PACKET_SIZE];
+} PacketBuffer;
+
+typedef struct {
+    PacketBuffer packet;
+    size_t received_bytes;
+    bool header_complete;
+    ReceiverState state;
+    uint16_t expected_payload_size;
+} PakitReceiver;
 
 // Initializes a packet receiver instance
 // Parameters:
