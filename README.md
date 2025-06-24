@@ -1,5 +1,7 @@
 # Packet Receiver Library
 
+Human input --> This is a 100% AI (copilot) gernerated lib
+
 A lightweight C library for receiving and parsing binary packet data byte-by-byte or from buffers.
 
 ## Overview
