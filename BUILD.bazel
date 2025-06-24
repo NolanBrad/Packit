@@ -1,0 +1,13 @@
+cc_library(
+    name = "packet_receiver",
+    srcs = ["src/packet_receiver.c"],
+    hdrs = ["include/packet_receiver.h"],
+    includes = ["include"],
+    visibility = ["//visibility:public"],
+)
+
+cc_binary(
+    name = "simple_receiver",
+    srcs = ["examples/simple_receiver.c"],
+    deps = [":packet_receiver"],
+)
