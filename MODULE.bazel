@@ -1,5 +1,5 @@
 module(
-    name = "packit",
+    name = "pakit",
     version = "0.0.1",
 )
 
