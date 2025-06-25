@@ -8,7 +8,10 @@ include_directories(include)
 
 file(GLOB SOURCES "src/*.c")
 
-add_library(packet_receiver ${SOURCES})
+add_library(pakit_lib "src/pakit.c")
 
-add_executable(simple_receiver examples/simple_receiver.c)
-target_link_libraries(simple_receiver packet_receiver)
+add_executable(pakit_sample sample/pakit_sample.c)
+target_link_libraries(pakit_sample pakit_lib)
+
+add_executable(pakit_test test/pakit_test.c)
+target_link_libraries(pakit_test pakit_lib)

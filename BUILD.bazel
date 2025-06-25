@@ -11,7 +11,7 @@ cc_library(
 
 cc_binary(
     name = "pakit_sample",
-    srcs = ["sample/packit_sample.c"],
+    srcs = ["sample/pakit_sample.c"],
     deps = [":pakit_lib"],
 )
 
