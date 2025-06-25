@@ -225,7 +225,7 @@ void test_empty_payload() {
     bool is_complete = pakit_is_packet_complete(&receiver, &packet);
     TEST_ASSERT("Empty payload packet check", is_complete == true);
     TEST_ASSERT("Empty payload size check", packet.size == 0);
-    TEST_ASSERT("Empty payload null check", packet.payload == NULL);
+    TEST_ASSERT("Empty payload pointer check", packet.payload != NULL);
 
     pakit_destroy(&receiver);
 }

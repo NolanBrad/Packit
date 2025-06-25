@@ -18,7 +18,7 @@ void pakit_init(PakitReceiver* receiver) {
     memset(receiver, 0, sizeof(PakitReceiver));
     receiver->received_bytes = 0;
     receiver->header_complete = false;
-    receiver->state = STATE_UNIQUE_ID;
+    receiver->state = STATE_UNIQUE_SOP;
     receiver->expected_payload_size = 0;
 }
 
@@ -38,10 +38,17 @@ PakitStatus pakit_receive_byte(PakitReceiver* receiver, uint8_t byte) {
 
     // Process the byte based on current state
     switch (receiver->state) {
-        case STATE_UNIQUE_ID:
-            // Process bytes for the unique ID
-            if (receiver->received_bytes == PACKET_SOP_SIZE) {
-                // Validate unique ID
+        case STATE_UNIQUE_SOP:
+            // Process bytes for the unique SOP
+            if (receiver->received_bytes == 1) {
+                // Validate unique SOP
+                if (receiver->packet.fields.header.sop[0] != EXPECTED_SOP_0) {
+                    pakit_init(receiver);
+                    return PAKIT_STATUS_ERROR_INVALID_SOP;
+                }
+            }
+            if (receiver->received_bytes == 2) {
+                // Validate unique SOP
                 if (receiver->packet.fields.header.sop[0] != EXPECTED_SOP_0 ||
                     receiver->packet.fields.header.sop[1] != EXPECTED_SOP_1) {
                     pakit_init(receiver);

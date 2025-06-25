@@ -28,7 +28,7 @@ typedef struct {
 
 // Define states for the packet receiver state machine
 typedef enum {
-    STATE_UNIQUE_ID,
+    STATE_UNIQUE_SOP,
     STATE_PACKET_TYPE,
     STATE_COUNT,
     STATE_SIZE,
